@@ -1,14 +1,18 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
-class CardInputStream extends InputStream {
+abstract class CardInputStream extends InputStream {
     private BufferedReader reader;
 
     public CardInputStream(InputStream input) {
         reader = new BufferedReader(new InputStreamReader(input));
     }
 
-    public Card readCard() {
+    
+    public Card readCard() throws IOException {
+        try {
         if (reader.readLine() == "CARD") {
             long id = Long.parseLong(reader.readLine());
             String name = reader.readLine();
@@ -22,10 +26,13 @@ class CardInputStream extends InputStream {
         } else {
             return null;
         }
+    } catch (IOException e) {
+        return null;
+    }
     }
 
     @Override
-    public void close() {
+    public void close() throws IOException {
         reader.close();
     }
 }
